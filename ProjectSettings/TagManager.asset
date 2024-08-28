@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Edge
+  - Paddle
+  - TargetPlayer2
+  - TargetPlayer1
   layers:
   - Default
   - TransparentFX

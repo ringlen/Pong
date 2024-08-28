@@ -4,16 +4,27 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
+    [SerializeField]
+    GameManager gameManager;
+
     private Rigidbody2D rb;
+    private float initialSpeed = 4f;
+    [SerializeField]
     private float speed = 4f;
-    private float speedIncrease = 0.25f;
-    private int hitCounter = 0;
+    [SerializeField]
+    private float speedIncrease = 0.1f;
+    [HideInInspector]
+    public int hitCounter = 0;
 
     private float timeMove = 1f;
+
+    private Vector3 originalPos;
     public void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        StartBall();
+
+        originalPos = gameObject.transform.position;
+        Invoke("StartBall", timeMove);
     }
     public void FixedUpdate()
     {
@@ -28,18 +39,32 @@ public class Ball : MonoBehaviour
             hitCounter++;
             Debug.Log("Hit counts: " + hitCounter);
         }
+        if (collision.gameObject.tag == "TargetPlayer1")
+        {
+            gameManager.scorePl1++;
+            ResetBall();
+            Debug.Log("Target1");
+        }
+        if (collision.gameObject.tag == "TargetPlayer2")
+        {
+            gameManager.scorePl2++;
+            ResetBall();
+            Debug.Log("Target2");
+        }
     }
 
     public void StartBall()
-    {
-        rb.velocity = new Vector2(1f, 1f).normalized * (speed + speedIncrease * hitCounter);
+    { 
+        rb.velocity = new Vector2(1f, 1f).normalized * initialSpeed;
     }
 
     public void ResetBall()
     {
-        rb.velocity = Vector2.zero;
-        rb.transform.position = Vector2.zero;
+        rb.transform.position = originalPos;
+        rb.velocity = Vector3.zero;
+        speed = initialSpeed;
         hitCounter = 0;
+
         Invoke("StartBall", timeMove);
     }
 
