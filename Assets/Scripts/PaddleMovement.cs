@@ -13,18 +13,18 @@ public class PaddleMovement : MonoBehaviour
 
     void Update()
     {
-        moveRightPaddle();
-        moveLeftPaddle();
+        MoveRightPaddle();
+        MoveLeftPaddle();
     }
 
-    public void moveRightPaddle()
+    public void MoveRightPaddle()
     {
         // Move paddle with up and down arrows
         float movementArrows = Input.GetAxis("VerticalArrows");
         rightPaddleRb.velocity = new Vector2(0, movementArrows * speed);
     }
 
-    public void moveLeftPaddle()
+    public void MoveLeftPaddle()
     {
         // Move paddle with W and S
         float movement = Input.GetAxis("Vertical");
