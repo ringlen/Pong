@@ -14,7 +14,7 @@ public class Ball : MonoBehaviour
     [SerializeField]
     private float speedIncrease = 0.1f;
     [HideInInspector]
-    public int hitCounter = 0;
+    private int hitCounter = 0;
 
     private float timeMove = 1f;
 
@@ -41,14 +41,18 @@ public class Ball : MonoBehaviour
         }
         if (collision.gameObject.tag == "TargetPlayer1")
         {
-            gameManager.scorePl1++;
+            gameManager.IncrementScorePlayer1();
             ResetBall();
+            PaddleMovement.Instance.ResetPaddle();
+
             Debug.Log("Target1");
         }
         if (collision.gameObject.tag == "TargetPlayer2")
         {
-            gameManager.scorePl2++;
+            gameManager.IncrementScorePlayer2();
             ResetBall();
+            PaddleMovement.Instance.ResetPaddle();
+            
             Debug.Log("Target2");
         }
     }

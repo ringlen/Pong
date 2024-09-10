@@ -5,12 +5,32 @@ using UnityEngine;
 public class PaddleMovement : MonoBehaviour
 {
     [SerializeField]
-    private Rigidbody2D leftPaddleRb;
-    [SerializeField]
-    private Rigidbody2D rightPaddleRb;
+    private Rigidbody2D leftPaddleRb, rightPaddleRb;
 
-    [SerializeField] private float speed = 10f;
+    public static PaddleMovement Instance;
 
+    private Vector3 leftPaddlePos, rightPaddlePos;
+
+    [SerializeField] 
+    private float speed = 10f;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    private void Start()
+    {
+        leftPaddlePos = leftPaddleRb.transform.position;
+        rightPaddlePos = rightPaddleRb.transform.position;
+
+    }
     void Update()
     {
         MoveRightPaddle();
@@ -29,5 +49,11 @@ public class PaddleMovement : MonoBehaviour
         // Move paddle with W and S
         float movement = Input.GetAxis("Vertical");
         leftPaddleRb.velocity = new Vector2(0, movement * speed);
+    }
+
+    public void ResetPaddle()
+    {
+        leftPaddleRb.transform.position = leftPaddlePos;
+        rightPaddleRb.transform.position = rightPaddlePos;
     }
 }

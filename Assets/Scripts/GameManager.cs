@@ -1,77 +1,114 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+public enum Winner
+{
+    None, Player1, Player2
+}
 public class GameManager : MonoBehaviour
 {
-    [SerializeField]
-    private Text scoreText;
+    public static GameManager Instance;
+    public Winner winner;
 
     [SerializeField]
-    SpriteRenderer themeRenderer;
+    private int scorePl1 = 0;
     [SerializeField]
-    SpriteRenderer leftPaddleRenderer, rightPaddleRenderer;
-    [SerializeField]
-    SpriteRenderer ballRenderer;
+    private int scorePl2 = 0;
 
-    public int scorePl1 = 0;
-    public int scorePl2 = 0;
+    private const int WIN_SCORE = 1;
 
-    private const int WIN_SCORE = 5;
+    public bool isGameOver { get; private set; } = false;
 
-    public bool isGameOver = false;
+    private bool hasSceneChanged = false;
 
-    private void Start()
+    private void Awake()
     {
-        ChangeTheme();
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
+
     void Update()
     {
-        UpdateScore();
-    }
-    public void UpdateScore()
-    {
-        scoreText.text = scorePl1 + " : " + scorePl2;
+        WinnerCheck();
     }
 
-    public void WinChech()
+    public int GetScorePl1()
     {
-        if (scorePl1 == WIN_SCORE)
+        return scorePl1;
+    }
+
+    public int GetScorePl2() 
+    {
+        return scorePl2;
+    }
+
+    public void IncrementScorePlayer1()
+    {
+        scorePl1++;
+    }
+    public void IncrementScorePlayer2() 
+    {
+        scorePl2++;
+    }
+    
+
+    public void WinnerCheck()
+    {
+        if (scorePl1 >= WIN_SCORE && !isGameOver)
         {
+            winner = Winner.Player1;
+            GameOver();
+        }
+        if (scorePl2 >= WIN_SCORE && !isGameOver) 
+        {
+            winner = Winner.Player2;
+            GameOver();
+        }
+    }
+
+    public void GameOver()
+    {        
+        if (!hasSceneChanged)
+        { 
+            SceneHandler.Instance.LoadRestartScene();
+            hasSceneChanged = true;
             isGameOver = true;
-            Debug.Log("Player1 is a winner!");
-        }
-        if (scorePl2 == WIN_SCORE)
-        {
-            isGameOver = true;
-            Debug.Log("Player2 is a winner!");
+
+            Debug.Log("Game is over");
         }
     }
 
-    public void ChangeTheme()
+    public void ResetGame()
     {
-        if (UIHandler.selectedTheme != null)
-        {
-            themeRenderer.sprite = UIHandler.selectedTheme;
-        }
-        if (UIHandler.selectedPaddle != null)
-        {
-            leftPaddleRenderer.sprite = UIHandler.selectedPaddle;
-            rightPaddleRenderer.sprite = UIHandler.selectedPaddle;
-        }
-        if (UIHandler.selectedBall != null)
-        {
-            ballRenderer.sprite = UIHandler.selectedBall;
-        }
+        isGameOver = false;
+        winner = Winner.None;
+
+        scorePl1 = 0;
+        scorePl2 = 0;
+
+        Debug.Log("Game is reset");
     }
 
-    public bool GameOver(bool isGameOver)
+    // Destroys instances of persistent objects
+    public void DestroyInstance()
     {
-        if (isGameOver)
+        GameObject[] persistentObjects = GameObject.FindGameObjectsWithTag("Persistent");
+        foreach (GameObject persistentObject in persistentObjects)
         {
-            // Load restart scene
+            Destroy(persistentObject);
         }
-        return isGameOver;
+
+        Debug.Log("Persistent game objects destroyed");
     }
+
 }
