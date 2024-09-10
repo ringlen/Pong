@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class SceneHandler : MonoBehaviour
 {
     public static SceneHandler Instance;
+
+    public bool isGameSceneLoaded { get; private set; } = false;
     public enum Scene
     {
         GameScene,
@@ -34,6 +36,7 @@ public class SceneHandler : MonoBehaviour
     {
         SceneManager.LoadScene(Scene.GameScene.ToString());
         Debug.Log("Game Scene loaded");
+        isGameSceneLoaded = true;
 
         if (GameManager.Instance != null)
         {

@@ -25,6 +25,7 @@ public class UIHandler : MonoBehaviour
     public void LoadScene()
     {
         SceneHandler.Instance.LoadGameScene();
+        AudioManager.Instance.PlayButtonAudio();
     }
 
     public void SelectTheme(Sprite theme)

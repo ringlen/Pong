@@ -18,10 +18,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int scorePl2 = 0;
 
-    private const int WIN_SCORE = 1;
+    private const int WIN_SCORE = 5;
 
     public bool isGameOver { get; private set; } = false;
-
     private bool hasSceneChanged = false;
 
     private void Awake()

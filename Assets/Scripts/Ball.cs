@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    [SerializeField]
-    GameManager gameManager;
-
     private Rigidbody2D rb;
     private float initialSpeed = 4f;
     [SerializeField]
@@ -37,23 +34,30 @@ public class Ball : MonoBehaviour
         if (collision.gameObject.tag == "Paddle")
         {
             hitCounter++;
+            AudioManager.Instance.PlayPaddleHitAudion();
             Debug.Log("Hit counts: " + hitCounter);
         }
         if (collision.gameObject.tag == "TargetPlayer1")
         {
-            gameManager.IncrementScorePlayer1();
+            GameManager.Instance.IncrementScorePlayer1();
             ResetBall();
             PaddleMovement.Instance.ResetPaddle();
+            AudioManager.Instance.PlayScoreAudio();
 
             Debug.Log("Target1");
         }
         if (collision.gameObject.tag == "TargetPlayer2")
         {
-            gameManager.IncrementScorePlayer2();
+            GameManager.Instance.IncrementScorePlayer2();
             ResetBall();
             PaddleMovement.Instance.ResetPaddle();
-            
+            AudioManager.Instance.PlayScoreAudio();
+
             Debug.Log("Target2");
+        }
+        if (collision.gameObject.tag == "Edge")
+        {
+            AudioManager.Instance.PlayBounceOfWallAudio();
         }
     }
 

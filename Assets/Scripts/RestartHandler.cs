@@ -45,10 +45,10 @@ public class RestartHandler : MonoBehaviour
             switch (GameManager.Instance.winner)
             {
                 case Winner.Player1:
-                    winnerText.text = "Player 1 WINNER";
+                    winnerText.text = "Player 1 WINS";
                     break;
                 case Winner.Player2:
-                    winnerText.text = "Player 2 WINNER";
+                    winnerText.text = "Player 2 WINS";
                     break;
                 default:
                     winnerText.text = "TIE";
@@ -70,5 +70,10 @@ public class RestartHandler : MonoBehaviour
     public void QuitToMenu()
     {
         SceneHandler.Instance.QuitToMenuScene();
+    }
+
+    public void ButtonAudio()
+    {
+        AudioManager.Instance.PlayButtonAudio();
     }
 }
